@@ -491,6 +491,7 @@ async function handlePurchase(productId: string) {
             </div>
           </div>
         </section> */}
+      <Footer />
 
      
       </main>
@@ -500,7 +501,6 @@ async function handlePurchase(productId: string) {
 
       {/* <Header onClick={() => scrollToSection("pricingSection")} /> */}
 
-      <Footer />
     </div>
   );
 }

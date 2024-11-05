@@ -42,7 +42,7 @@ export default function Navbar({
     -translate-x-1/2
     z-50
     text-white
-    flex w-full max-w-screen-xl items-center justify-between rounded-3xl dark:shadow-muted/25 shadow-lg shadow-foreground/10 border-[0.5px] border-gray-700 py-4 px-6"
+    flex w-full max-w-screen-xl items-center justify-around rounded-3xl dark:shadow-muted/25 shadow-lg shadow-foreground/10 border-[0.5px] border-gray-700 py-4 px-6"
       >
     
         <ul className="lg:flex hidden items-center gap-12  text-sm font-medium ">
@@ -72,7 +72,9 @@ export default function Navbar({
               Go to app
             </Link>
           ) : (
-            <>
+            <div
+            className = "w-full flex flex-row gap-2 justify-end"
+            >
               <button
                 className="  bg-[rgba(39,60,110,0.1)] hover:bg-[rgba(39,60,110,0.39)] text-[14px] border-[1px] border-[rgb(39,60,110)] transition-colors duration-200 px-4 py-2 rounded-md cursor-pointer"
                 onClick={() => signIn("google")}
@@ -86,7 +88,7 @@ export default function Navbar({
               >
                 Create An Account
               </button>
-            </>
+            </div>
           )}
 
           {/* <a href="https://app.jutsu.ai/signup">
@@ -95,8 +97,13 @@ export default function Navbar({
           </button>
         </a> */}
         </div>
-
-        <div className="relative">
+        <div className="relative
+        lg:hidden
+        flex
+        items-center
+        justify-end
+        w-full
+        ">
           <button
             className="inline-flex
       bg-[rgba(39,60,110,0.1)] hover:bg-[rgba(39,60,110,0.39)] border-[0.5px] border-[rgb(39,60,110)]
@@ -128,7 +135,7 @@ export default function Navbar({
   
           {isDropdownOpen && (
             <div
-              className="absolute right-0 text-white bg-white/15 
+              className="absolute top-[30px] right-0 text-white bg-white/15 
   mt-2 w-48 rounded-md shadow-lg z-10 px-[3px] border-[#2222220d] border-[0.5px]"
               style={{
                 boxShadow: "0 25px 50px -12px rgba(0, 0, 0, .25)",
@@ -139,15 +146,7 @@ export default function Navbar({
                 <a href="/" className="block px-4 py-2 text-sm text-white  ">
                   Home
                 </a>
-                <a href="/ycai" className="block px-4 py-2 text-sm text-white ">
-                  YCAI
-                </a>
-                <a
-                  href="/zero-to-glitching"
-                  className="block px-4 py-2 text-sm text-white "
-                >
-                  Zero To Glitching
-                </a>
+       
                 <div className="border-t border-white/10 my-2"></div>
                 {session ? (
                   <Link
