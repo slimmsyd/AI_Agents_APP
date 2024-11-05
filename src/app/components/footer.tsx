@@ -98,7 +98,7 @@ export default function Footer() {
       <div className="mt-16 border-t border-white/10 pt-8 lg:flex lg:justify-between ">
         <div>
           <h3 className="text-sm font-semibold leading-6 text-white">Love our service? Don't miss what's next!</h3>
-          <p className="mt-2 text-sm leading-6 text-white">Sign up for updates on new features as we continue to support other messaging apps!</p>
+          <p className="mt-2 text-sm leading-6 text-white">Sign up for updates on new features as we continue to create more AI agents</p>
         </div>
         <form className="mt-6 max-w-md lg:mt-0">
           <div className="flex gap-x-3">
