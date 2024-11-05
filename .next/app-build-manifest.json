@@ -16,16 +16,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/auth/[...nextauth]/route.js"
     ],
-    "/ai/chat/page": [
+    "/ai/agent/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/ai/chat/page.css",
-      "static/chunks/app/ai/chat/page.js"
+      "static/chunks/app/ai/agent/page.js"
     ],
-    "/api/userConversations/route": [
+    "/ai/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/userConversations/route.js"
+      "static/chunks/app/ai/dashboard/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",

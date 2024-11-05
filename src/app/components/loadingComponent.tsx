@@ -12,7 +12,7 @@ const LoadingComponent: React.FC<LoadingProps> = ({ isLoading }) => {
   return (
     <ThreeDots
           width="55"
-          color="white"
+          color="black"
         />
 
   );
