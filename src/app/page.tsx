@@ -74,28 +74,28 @@ export default function Home() {
   }
   // getAllUsers()
 
-async function testWhopAPI() {
+// async function testWhopAPI() {
 
-  console.log("This was clicked")
+//   console.log("This was clicked")
 
-    const key = "vpBqd9i4AwGFvUDnzQdaHA9aVm8NwuUtFLJzPDI-odw"
-    console.log("Key", key)
+//     const key = "vpBqd9i4AwGFvUDnzQdaHA9aVm8NwuUtFLJzPDI-odw"
+//     console.log("Key", key)
   
-    try {
-      const response = await axios.get('https://api.whop.com/api/v2/products', {
-        headers: {
-          'Authorization': `Bearer ${key}`,
-          'Accept': 'application/json'
-        }
-      });
+//     try {
+//       const response = await axios.get('https://api.whop.com/api/v2/products', {
+//         headers: {
+//           'Authorization': `Bearer ${key}`,
+//           'Accept': 'application/json'
+//         }
+//       });
       
-      console.log('Products:', response.data);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching products:', error.response ? error.response.data : error.message);
-}
+//       console.log('Products:', response.data);
+//       return response.data;
+//     } catch (error) {
+//       console.error('Error fetching products:', error.response ? error.response.data : error.message);
+// }
 
-}
+// }
 
 
 
@@ -321,7 +321,6 @@ async function handlePurchase(productId: string) {
 
             <div className="flex flex-row gap-[15px] items-center  mt-[20px]">
               <button
-                onClick={testWhopAPI}
                 // onClick={() => scrollToSection("pricingSection")}
                 className="  w-[180px] flex items-center justify-center  md:flex text-white px-4 py-2 rounded-md 
              bg-[rgba(39,60,110,0.1)] hover:bg-[rgba(39,60,110,0.39)] border-[0.5px] border-[rgb(39,60,110)]  "
@@ -333,7 +332,7 @@ async function handlePurchase(productId: string) {
                 target="_blank"
                 className={` max-w-[200px] rounded-md h-[40px] w-[180px] flex items-center justify-center hover:bg-white/85  bg-white text-black  `}
               >
-                Join Discord
+                Join Waitlist
               </Link>
             </div>
           </div>
