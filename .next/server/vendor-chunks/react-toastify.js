@@ -31,7 +31,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   useToast: () => (/* binding */ N),
 /* harmony export */   useToastContainer: () => (/* binding */ L)
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "(ssr)/./node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js");
 /* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clsx */ "(ssr)/./node_modules/clsx/dist/clsx.mjs");
 /* __next_internal_client_entry_do_not_use__ Bounce,Flip,Icons,Slide,ToastContainer,Zoom,collapseToast,cssTransition,toast,useToast,useToastContainer auto */ 
 

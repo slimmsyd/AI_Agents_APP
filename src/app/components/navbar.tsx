@@ -65,12 +65,21 @@ export default function Navbar({
 
         <div className="lg:flex hidden items-end justify-end gap-2 flex-1">
           {session ? (
-            <Link
+            <>
+                <Link
               href="/ai/chat"
               className="  bg-[rgba(39,60,110,0.1)] hover:bg-[rgba(39,60,110,0.39)] text-[14px] border-[1px] border-[rgb(39,60,110)] transition-colors duration-200 px-4 py-2 rounded-md cursor-pointer"
             >
               Go to app
             </Link>
+            <div
+              onClick={() => signOut()}
+              className="  bg-[rgba(39,60,110,0.1)] hover:bg-[rgba(39,60,110,0.39)] text-[14px] border-[1px] border-[rgb(39,60,110)] transition-colors duration-200 px-4 py-2 rounded-md cursor-pointer"
+            >
+              Logout
+            </div>
+            </>
+        
           ) : (
             <div
             className = "w-full flex flex-row gap-2 justify-end"
