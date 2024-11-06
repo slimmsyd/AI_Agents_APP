@@ -2,19 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useEditable } from "@chakra-ui/react";
 import axios from "axios";
+
 interface AgentConfig {
   name: string;
-  // Add other properties that agentConfig might have
+  description: string;
+  instructions: string;
+  temperature: number;
 }
 
-export default function DashboardPage() {
+export default function DashboardPage({ agentConfig }: { agentConfig: AgentConfig }) {
   const searchParams = useSearchParams();
+  const agentName = searchParams.get("agent") || "AI Agent";
   const [message, setMessage] = useState("");
   const [agentID, setAgentID] = useState(null);
   const [messages, setMessages] = useState<Array<{text: string, isUser: boolean}>>([]);
-  const [agentConfig, setAgentConfig] = useState<AgentConfig>({ name: 'AI Assistant' });
 
   const suggestedQuestions = [
     "How much revenue did Apple make last year?",
