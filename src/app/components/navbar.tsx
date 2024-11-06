@@ -135,7 +135,7 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
           {login ? (
             <div className="flex flex-row gap-2">
               <Link
-                href="/ai/agents"
+                href="/ai/agent"
                 className="  bg-[rgba(39,60,110,0.1)] hover:bg-[rgba(39,60,110,0.39)] text-[14px] border-[1px] border-[rgb(39,60,110)] transition-colors duration-200 px-4 py-2 rounded-md cursor-pointer"
               >
                 Go to app
