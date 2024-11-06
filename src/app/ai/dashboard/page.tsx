@@ -31,6 +31,7 @@ const formatResponse = (response: string): string => {
   return paragraphs.map(paragraph => `<p className="user_Messages">${paragraph.trim()}</p>`).join('<br>');
 };
 
+// @ts-ignore
 export default function DashboardPage({ agentConfig }: { agentConfig: AgentConfig }) {
   const searchParams = useSearchParams();
   const agentName = searchParams.get("agent") || "AI Agent";
