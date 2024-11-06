@@ -13,12 +13,32 @@ interface AgentConfig {
  }
 }
 
+interface Response {
+  question: string;
+  response: string;
+  id: string;
+}
+
+const formatResponse = (response: string): string => {
+  if (!response) return '';
+  let formattedResponse = response.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+  const listItems = formattedResponse.match(/(\d+\..*?)(?=(\d+\.)|$)/gs);
+  if (listItems) {
+    const listFormatted = listItems.map(item => `<li>${item.trim()}</li>`).join('<br />');
+    formattedResponse = formattedResponse.replace(listItems.join(''), `<ul>${listFormatted}</ul>`);
+  }
+
+  const paragraphs = formattedResponse.split('\n').filter(paragraph => paragraph.trim() !== '');
+  return paragraphs.map(paragraph => `<p className="user_Messages">${paragraph.trim()}</p>`).join('<br>');
+};
+
 export default function DashboardPage({ agentConfig }: AgentConfig ) {
   const searchParams = useSearchParams();
   const agentName = searchParams.get("agent") || "AI Agent";
   const [message, setMessage] = useState("");
   const [agentID, setAgentID] = useState(null);
-  const [messages, setMessages] = useState<Array<{text: string, isUser: boolean}>>([]);
+  const [responses, setResponses] = useState<Response[]>([]);
 
   const suggestedQuestions = [
     "How much revenue did Apple make last year?",
@@ -49,9 +69,17 @@ export default function DashboardPage({ agentConfig }: AgentConfig ) {
       console.error("No agent ID found or empty message");
       return;
     }
-
-    // Add user message to the chat
-    setMessages(prev => [...prev, { text: message, isUser: true }]);
+    
+    const messageId = Date.now().toString();
+    
+    const newResponse: Response = {
+      question: message,
+      response: '',
+      id: messageId
+    };
+    
+    setResponses(prev => [...prev, newResponse]);
+    setMessage("");
     
     const formattedAgentID = localAgentID.trim();
     const endpoint = `https://www.huemanapi.com/agent_demo/${formattedAgentID}`;
@@ -61,9 +89,7 @@ export default function DashboardPage({ agentConfig }: AgentConfig ) {
     try {
       const response = await axios.post(
         endpoint,
-        {
-          message: message,
-        },
+        { message },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -71,10 +97,22 @@ export default function DashboardPage({ agentConfig }: AgentConfig ) {
         }
       );
 
-      // Add AI response to the chat
-      setMessages(prev => [...prev, { text: response.data.Assistant, isUser: false }]);
-      setMessage(""); // Clear input after sending
-      console.log("Logging the response", response);
+      const finalResponse = response.data.Assistant;
+      let currentText = '';
+      
+      for (let i = 0; i < finalResponse.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 15));
+        currentText += finalResponse[i];
+        setResponses(prev => 
+          prev.map(res => 
+            res.id === messageId 
+              ? { ...res, response: currentText }
+              : res
+          )
+        );
+      }
+
+      setMessage("");
     } catch (error) {
       console.error("Error sending message", error);
     }
@@ -111,19 +149,22 @@ export default function DashboardPage({ agentConfig }: AgentConfig ) {
 
       {/* Chat Messages */}
       <div className="w-full max-w-2xl px-4 mb-24 mt-8 overflow-y-auto">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`mb-4 ${msg.isUser ? 'text-right' : 'text-left'}`}
-          >
-            <div
-              className={`inline-block max-w-[80%] px-4 py-2 rounded-lg ${
-                msg.isUser
-                  ? 'bg-gray-700 text-white'
-                  : 'bg-white text-gray-700 border border-gray-200'
-              }`}
-            >
-              {msg.text}
+        {responses.map((res) => (
+          <div key={res.id} className="space-y-4">
+            {/* User message */}
+            <div className="text-right mb-4">
+              <div className="inline-block max-w-[80%] px-4 py-2 rounded-lg bg-gray-700 text-white">
+                {res.question}
+              </div>
+            </div>
+            
+            {/* AI response */}
+            <div className="text-left mb-4">
+              <div className="inline-block max-w-[80%] px-4 py-2 rounded-lg bg-white text-gray-700 border border-gray-200">
+                <div dangerouslySetInnerHTML={{ 
+                  __html: formatResponse(res.response)
+                }} />
+              </div>
             </div>
           </div>
         ))}
