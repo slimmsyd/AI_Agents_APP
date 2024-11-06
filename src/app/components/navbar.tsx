@@ -132,7 +132,7 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
         </ul>
 
         <div className="lg:flex hidden items-end justify-end gap-2 flex-1">
-          {session ? (
+          {login ? (
             <div className="flex flex-row gap-2">
               <Link
                 href="/ai/agent"

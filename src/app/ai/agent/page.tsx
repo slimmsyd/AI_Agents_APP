@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import LoadingComponent from '@/app/components/loadingComponent';
+import ChatContainer from '../components/ChatContainer';
 
 import DashboardPage from '../dashboard/page';
 import axios from 'axios';
@@ -19,7 +20,7 @@ export default function AgentPage() {
     instructions: '',
     temperature: 0.7,
   });
-
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const[response, setResponse] = useState(null);
   const [agentID, setAgentID] = useState(null);
@@ -85,19 +86,7 @@ export default function AgentPage() {
 
 
   
-  const handleCreateAgent = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setTimeout(() => {
-      setShowDashboard(true);
-    }, 3000);
-
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-  };
-
+ 
   useEffect(() => {
 
     console.log("Logging the isloading", isLoading);
@@ -111,9 +100,20 @@ export default function AgentPage() {
   return (
 
     showDashboard ? (   
-      <DashboardPage 
-        agentConfig={agentConfig}
-      />
+      <div className="relative">
+        <DashboardPage 
+          agentConfig={agentConfig}
+        />
+        <button
+          onClick={() => setIsChatOpen(!isChatOpen)}
+          className="fixed bottom-[50px] left-4 bg-gray-700 text-white p-4 rounded-full shadow-lg hover:bg-gray-600"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+        </button>
+        <ChatContainer isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} agentId={agentID} />
+      </div>
     ) : (
       <div className="flex flex-col items-center min-h-screen bg-gray-50 p-4">
         <div className="w-full max-w-4xl flex flex-col items-center flex-grow">
