@@ -33,7 +33,7 @@ const formatResponse = (response: string): string => {
 };
 
 // @ts-ignore
-export default function DashboardPage({ agentConfig }: { agentConfig: AgentConfig }) {
+export default function DashboardPage({agentConfig}) {
   const searchParams = useSearchParams();
   const agentName = searchParams.get("agent") || "AI Agent";
   const [message, setMessage] = useState("");
