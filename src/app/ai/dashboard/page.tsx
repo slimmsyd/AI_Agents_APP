@@ -5,12 +5,10 @@ import { useSearchParams } from "next/navigation";
 import axios from "axios";
 
 interface AgentConfig {
- agentConfig: {
   name: string;
   description: string;
   instructions: string;
   temperature: number;
- }
 }
 
 interface Response {
@@ -33,7 +31,7 @@ const formatResponse = (response: string): string => {
   return paragraphs.map(paragraph => `<p className="user_Messages">${paragraph.trim()}</p>`).join('<br>');
 };
 
-export default function DashboardPage({ agentConfig }: AgentConfig ) {
+export default function DashboardPage({ agentConfig }: { agentConfig: AgentConfig }) {
   const searchParams = useSearchParams();
   const agentName = searchParams.get("agent") || "AI Agent";
   const [message, setMessage] = useState("");
