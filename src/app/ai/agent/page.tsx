@@ -24,6 +24,7 @@ export default function AgentPage() {
 
   const[response, setResponse] = useState(null);
   const [agentID, setAgentID] = useState(null);
+  const [agentIDs, setAgentIDs] = useState<string[]>([]);
 
   useEffect(() => {
  
@@ -64,11 +65,17 @@ export default function AgentPage() {
 
       })
       const data = response.data;
+      const newAgentId = data.AGENT_ID;
+
+
+      const updatedAgentIDs = [...agentIDs, newAgentId];
+      setAgentIDs(updatedAgentIDs)
+
       setIsLoading(false);
       setShowDashboard(true);
       setResponse(data);
-      setAgentID(data.agent_id);
-      localStorage.setItem("agentID", data.agent_id);
+      setAgentID(data.AGENT_ID);
+      localStorage.setItem("agentID", data.AGENT_ID);
       localStorage.setItem("agentReponse", JSON.stringify(data));
       console.log("Logging the data", data)
 
@@ -112,7 +119,7 @@ export default function AgentPage() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
           </svg>
         </button>
-        <ChatContainer isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} agentId={agentID} />
+        <ChatContainer isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} agentId={agentID} agentIDs={agentIDs} />
       </div>
     ) : (
       <div className="flex flex-col items-center min-h-screen bg-gray-50 p-4">

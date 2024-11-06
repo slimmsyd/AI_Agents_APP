@@ -14,12 +14,16 @@ interface ChatContainerProps {
   isOpen: boolean;
   onClose: () => void;
   agentId: string;
+  agentIDs: string[];
 }
 
-export default function ChatContainer({ isOpen, onClose, agentId }: ChatContainerProps) {
+export default function ChatContainer({ isOpen, onClose, agentId, agentIDs }: ChatContainerProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  console.log("Logging the agnet ID HER", agentId)
+  console.log("Loggin the agent idS ehre", agentIDs)
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
