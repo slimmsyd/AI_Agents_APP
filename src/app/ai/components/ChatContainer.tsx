@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Link from 'next/link';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -74,14 +75,31 @@ export default function ChatContainer({ isOpen, onClose, agentId }: ChatContaine
         {/* Header */}
         <div className="p-4 border-b flex justify-between items-center">
           <h2 className="text-lg font-semibold">Chat History</h2>
+          <Link href="/" className="text-sm font-semibold">Home</Link>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className= " !bg-transparent text-gray-500 hover:text-gray-700"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
+        </div>
+
+        {/* AI Agents Section */}
+        <div className="border-b p-4">
+          <h3 className="text-md  mb-3">AI Agents</h3>
+          <div className="space-y-2">
+            {/* AI agents will be dynamically rendered here */}
+          </div>
+        </div>
+
+        {/* Recent Conversations Section */}
+        <div className="border-b p-4">
+          <h3 className="text-md  mb-3">Recent Conversations</h3>
+          <div className="space-y-2">
+            {/* Recent conversations will be dynamically rendered here */}
+          </div>
         </div>
 
         {/* Messages */}
@@ -104,26 +122,7 @@ export default function ChatContainer({ isOpen, onClose, agentId }: ChatContaine
         </div>
 
         {/* Input */}
-        <form 
-        // onSubmit={sendMessage} 
-        className="p-4 border-t">
-          <div className="flex space-x-2">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Type your message..."
-              className="flex-1 p-2 border rounded-lg focus:outline-none focus:border-blue-500"
-            />
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:bg-blue-300"
-            >
-              Send
-            </button>
-          </div>
-        </form>
+      
       </div>
     </div>
   );
