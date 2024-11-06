@@ -9,12 +9,12 @@ interface AgentConfig {
   // Add other properties that agentConfig might have
 }
 
-export default function DashboardPage({ agentConfig }: { agentConfig: AgentConfig }) {
+export default function DashboardPage() {
   const searchParams = useSearchParams();
-  const agentName = searchParams.get("agent") || "AI Agent";
   const [message, setMessage] = useState("");
   const [agentID, setAgentID] = useState(null);
   const [messages, setMessages] = useState<Array<{text: string, isUser: boolean}>>([]);
+  const [agentConfig, setAgentConfig] = useState<AgentConfig>({ name: 'AI Assistant' });
 
   const suggestedQuestions = [
     "How much revenue did Apple make last year?",

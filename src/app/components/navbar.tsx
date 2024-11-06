@@ -132,7 +132,7 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
         </ul>
 
         <div className="lg:flex hidden items-end justify-end gap-2 flex-1">
-          {login ? (
+          {session ? (
             <div className="flex flex-row gap-2">
               <Link
                 href="/ai/agent"
@@ -149,12 +149,7 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
             </div>
           ) : (
             <div className="w-full flex flex-row gap-2 justify-end">
-              {/* <button
-                className="  bg-[rgba(39,60,110,0.1)] hover:bg-[rgba(39,60,110,0.39)] text-[14px] border-[1px] border-[rgb(39,60,110)] transition-colors duration-200 px-4 py-2 rounded-md cursor-pointer"
-                onClick={() => signIn("google")}
-              >
-                Login{" "}
-              </button> */}
+         
 
               <button
                 className="  bg-[rgba(39,60,110,0.1)] hover:bg-[rgba(39,60,110,0.39)] text-[14px] border-[1px] border-[rgb(39,60,110)] transition-colors duration-200 px-4 py-2 rounded-md cursor-pointer"
@@ -165,11 +160,7 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
             </div>
           )}
 
-          {/* <a href="https://app.jutsu.ai/signup">
-          <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary shadow hover:bg-primary/90 px-4 py-2 text-white rounded-[14px] h-10">
-            Signup
-          </button>
-        </a> */}
+
         </div>
         <div
           className="relative
@@ -224,7 +215,7 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
                 </a>
 
                 <div className="border-t border-white/10 my-2"></div>
-                {session ? (
+                {login ? (
                   <div className="flex flex-col gap-2">
                     <div
                       onClick={() => signOut()}
@@ -233,7 +224,7 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
                       Logout
                     </div>
                     <Link
-                      href="/ai/chat"
+                      href="/ai/agent"
                       className="inline-flex bg-white text-black items-center  justify-center w-full whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary shadow hover:bg-primary/90 px-4 py-2  rounded-[14px] h-10"
                     >
                       Go to app
