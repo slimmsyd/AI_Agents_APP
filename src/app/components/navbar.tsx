@@ -25,10 +25,88 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
 
+  const [username, setUsername] = useState('');
+	const [password, setPassword] = useState('');
+	const [loginError, setLoginError] = useState('');
+  const [login, setLogin] = useState(false);
+
   const toggleDropdown = () => {
     console.log("toggleDropdown");
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    const username = localStorage.getItem('username');
+    const userID = localStorage.getItem("user_id")
+
+    if (accessToken && username && userID) {
+      setLogin(true);
+    }
+
+
+  }, [session])
+
+
+
+	const handleSubmit = async (event: React.FormEvent) => {
+		event.preventDefault();
+
+		const requestBody = JSON.stringify({ username: username, password: password });
+
+		const loginUrl = 'https://www.huemanapi.com/login'; // props.setlogin(true);
+
+    console.log("Logging the request body", requestBody)
+    console.log("Logging the login url", loginUrl)
+
+		try {
+			const response = await fetch(loginUrl, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: requestBody
+			});
+
+			const data = await response.json(); // console.log('Loggin the Response', response);
+
+
+			console.log("Logging the Data", data)
+
+			// console.log('Loggin the data', data);
+			if (response.ok) {
+				// console.log('Login successful:', data);
+				// console.log('Logggin the Response', response);
+				localStorage.setItem('accessToken', data.access_token);
+				localStorage.setItem('username', data.username); // console.log('Loggin the data access token', data.access_token);
+				localStorage.setItem("user_id", data.user_id )
+
+				const accessToken = localStorage.getItem('accessToken');
+				const username = localStorage.getItem('username');
+				const userID = localStorage.getItem("user_id")
+
+
+
+				if (accessToken && username && userID) {
+
+          setLogin(true);
+
+        }
+			} else {
+				console.error('Login failed again:', data.error);
+				setLoginError(data.error || 'Unknown error occurred');
+				console.log('Login error:', data);
+			}
+		} catch (error) {
+			console.error('Fetch error:', error);
+			setLoginError('Failed to connect to the server');
+		}
+	};
+
+
+  useEffect(() => {
+    console.log("Logging the username", username)
+  }, [username])
 
   return (
     <>
@@ -208,6 +286,8 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
             </h2>
 
             <div className="space-y-4">
+
+              <form onSubmit={handleSubmit}>
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">
                   Username
@@ -216,6 +296,8 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
                   type="text"
                   className="w-full px-3 py-2 bg-[#2a2a2a] rounded-md border border-gray-600 text-white"
                   placeholder="Enter username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
 
@@ -227,12 +309,19 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
                   type="password"
                   className="w-full px-3 py-2 bg-[#2a2a2a] rounded-md border border-gray-600 text-white"
                   placeholder="Enter password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
 
               <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition-colors">
                 Sign Up
               </button>
+
+              </form>
+           
+
+        
 
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">

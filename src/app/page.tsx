@@ -4,16 +4,12 @@ import Image from "next/image";
 import Navbar from "./components/navbar";
 import { useState, useEffect, useCallback, useRef } from "react";
 import Footer from "./components/footer";
-import GlobalButton from "./components/globalbutton";
 import Link from "next/link";
-import Lenis from "@studio-freight/lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import Video from "./components/video";
 import axios from "axios";
 import Stars from "./components/svgs/stars";
 ;
-import { CommandPaletteIcon } from "@primer/octicons-react";
 
 import {useSession, signIn, signOut} from "next-auth/react"
 import { toast } from "react-toastify";
@@ -32,70 +28,7 @@ export default function Home() {
 
   const {data: session} = useSession()
 
-  async function getAllUsers() {
-    const key = "vpBqd9i4AwGFvUDnzQdaHA9aVm8NwuUtFLJzPDI-odw"
-    
-    console.log("Logging the session", session)
 
-    try {
-      // Get all memberships
-      const response = await axios.get('https://api.whop.com/api/v2/memberships', {
-        headers: {
-          'Authorization': `Bearer ${key}`,
-          'Accept': 'application/json'
-        }
-      });
-      
-      // Map out all member emails
-      console.log("Logging all memebrships", response.data.data)
-      const memberEmails = response.data.data.map((member: any) => member.email);
-      // console.log("All member emails:", memberEmails);
-      if (session?.user?.email) {
-        const userMembership = response.data.data.find(
-          (membership: any) => membership.email === session.user.email
-        );
-
-        if (userMembership) {
-          console.log('Found user membership:', userMembership);
-          return userMembership;
-        } else {
-          console.log('User not found in memberships');
-          return null;
-        }
-      } else {
-        console.log('No session user email available');
-        return null;
-      }
-
-    } catch (error) {
-      console.error('Error fetching memberships:', error.response ? error.response.data : error.message);
-      toast.error("Error fetching memberships");
-    }
-  }
-  // getAllUsers()
-
-// async function testWhopAPI() {
-
-//   console.log("This was clicked")
-
-//     const key = "vpBqd9i4AwGFvUDnzQdaHA9aVm8NwuUtFLJzPDI-odw"
-//     console.log("Key", key)
-  
-//     try {
-//       const response = await axios.get('https://api.whop.com/api/v2/products', {
-//         headers: {
-//           'Authorization': `Bearer ${key}`,
-//           'Accept': 'application/json'
-//         }
-//       });
-      
-//       console.log('Products:', response.data);
-//       return response.data;
-//     } catch (error) {
-//       console.error('Error fetching products:', error.response ? error.response.data : error.message);
-// }
-
-// }
 
 
 

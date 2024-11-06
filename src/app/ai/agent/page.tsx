@@ -5,12 +5,13 @@ import { useRouter } from 'next/navigation';
 import LoadingComponent from '@/app/components/loadingComponent';
 
 import DashboardPage from '../dashboard/page';
+import axios from 'axios';
+import { resolve } from 'path';
 
 
 export default function AgentPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState('');
   const [showDashboard, setShowDashboard] = useState(false);
   const [agentConfig, setAgentConfig] = useState({
     name: '',
@@ -19,6 +20,71 @@ export default function AgentPage() {
     temperature: 0.7,
   });
 
+
+  const[response, setResponse] = useState(null);
+  const [agentID, setAgentID] = useState(null);
+
+  useEffect(() => {
+ 
+    const agentResponse = localStorage.getItem("agentReponse");
+    if(agentResponse) {
+      setShowDashboard(true);
+      setResponse(JSON.parse(agentResponse));
+      setAgentID(JSON.parse(agentResponse).agent_id);
+    }
+
+
+  }, [])
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const accessToken = localStorage.getItem('accessToken');
+
+
+    setIsLoading(true);
+
+    const endpoint = "https://www.huemanapi.com/create_agent"
+
+
+    console.log("Logging the agent config", agentConfig.instructions)
+
+    try {
+      const response = await axios.post(endpoint, {
+        agent_name: agentConfig.name,
+        instructions: agentConfig.instructions
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
+
+      })
+      const data = response.data;
+      setIsLoading(false);
+      setShowDashboard(true);
+      setResponse(data);
+      setAgentID(data.agent_id);
+      localStorage.setItem("agentID", data.agent_id);
+      localStorage.setItem("agentReponse", JSON.stringify(data));
+      console.log("Logging the data", data)
+
+
+
+    } catch (error) {
+      console.error("Error creating agent", error)
+      setIsLoading(false);
+    }
+
+
+  }
+
+
+
+
+  
   const handleCreateAgent = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -29,11 +95,7 @@ export default function AgentPage() {
     
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Navigate to dashboard
 
-
-    // router.push(`/ai/dashboard?agent=${encodeURIComponent(agentConfig.name)}`);
   };
 
   useEffect(() => {
@@ -41,6 +103,8 @@ export default function AgentPage() {
     console.log("Logging the isloading", isLoading);
         
   }, [isLoading]);
+
+
 
 
 
@@ -65,7 +129,7 @@ export default function AgentPage() {
           </div>
         ) : (
           <div className="w-full max-w-2xl bg-white p-6 rounded-lg shadow-sm mb-8">
-            <form onSubmit={handleCreateAgent} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {/* Agent Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
