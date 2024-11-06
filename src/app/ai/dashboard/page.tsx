@@ -4,8 +4,12 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useEditable } from "@chakra-ui/react";
 import axios from "axios";
+interface AgentConfig {
+  name: string;
+  // Add other properties that agentConfig might have
+}
 
-export default function DashboardPage({ agentConfig }: { agentConfig: any }) {
+export default function DashboardPage({ agentConfig }: { agentConfig: AgentConfig }) {
   const searchParams = useSearchParams();
   const agentName = searchParams.get("agent") || "AI Agent";
   const [message, setMessage] = useState("");
@@ -34,18 +38,21 @@ export default function DashboardPage({ agentConfig }: { agentConfig: any }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const agentRes = localStorage.getItem("agentReponse");
-    let agentID = null;
-    if (agentRes) {
-      const parsedRes = JSON.parse(agentRes);
-      agentID = parsedRes.agent_id;
+    const localAgentID = localStorage.getItem("agentID"); 
+    
+    // Validate agentID before making the request
+    if (!localAgentID) {
+      console.error("No agent ID found");
+      return;
     }
 
-    console.log("Logging the agent ID", agentID);
-
-    const endpoint = `https://www.huemanapi.com/agent_demo/${localStorage.getItem("agentID")}`;
+    // Ensure agentID is properly formatted (remove any whitespace and validate)
+    const formattedAgentID = localAgentID.trim();
+    
+    const endpoint = `https://www.huemanapi.com/agent_demo/${formattedAgentID}`;
 
     const accessToken = localStorage.getItem("accessToken");
+    console.log("Logging the endpoint", message);
 
     try {
       const response = await axios.post(

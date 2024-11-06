@@ -15,7 +15,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import Link from "next/link";
-
+ 
 interface NavbarProps {
   scrollToSection: (sectionId: string) => void;
 }
