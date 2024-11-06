@@ -14,6 +14,7 @@ export default function DashboardPage({ agentConfig }: { agentConfig: AgentConfi
   const agentName = searchParams.get("agent") || "AI Agent";
   const [message, setMessage] = useState("");
   const [agentID, setAgentID] = useState(null);
+  const [messages, setMessages] = useState<Array<{text: string, isUser: boolean}>>([]);
 
   const suggestedQuestions = [
     "How much revenue did Apple make last year?",
@@ -40,17 +41,16 @@ export default function DashboardPage({ agentConfig }: { agentConfig: AgentConfi
 
     const localAgentID = localStorage.getItem("agentID"); 
     
-    // Validate agentID before making the request
-    if (!localAgentID) {
-      console.error("No agent ID found");
+    if (!localAgentID || !message.trim()) {
+      console.error("No agent ID found or empty message");
       return;
     }
 
-    // Ensure agentID is properly formatted (remove any whitespace and validate)
-    const formattedAgentID = localAgentID.trim();
+    // Add user message to the chat
+    setMessages(prev => [...prev, { text: message, isUser: true }]);
     
+    const formattedAgentID = localAgentID.trim();
     const endpoint = `https://www.huemanapi.com/agent_demo/${formattedAgentID}`;
-
     const accessToken = localStorage.getItem("accessToken");
     console.log("Logging the endpoint", message);
 
@@ -67,6 +67,9 @@ export default function DashboardPage({ agentConfig }: { agentConfig: AgentConfi
         }
       );
 
+      // Add AI response to the chat
+      setMessages(prev => [...prev, { text: response.data.Assistant, isUser: false }]);
+      setMessage(""); // Clear input after sending
       console.log("Logging the response", response);
     } catch (error) {
       console.error("Error sending message", error);
@@ -99,6 +102,26 @@ export default function DashboardPage({ agentConfig }: { agentConfig: AgentConfi
           >
             {question}
           </button>
+        ))}
+      </div>
+
+      {/* Chat Messages */}
+      <div className="w-full max-w-2xl px-4 mb-24 mt-8 overflow-y-auto">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`mb-4 ${msg.isUser ? 'text-right' : 'text-left'}`}
+          >
+            <div
+              className={`inline-block max-w-[80%] px-4 py-2 rounded-lg ${
+                msg.isUser
+                  ? 'bg-gray-700 text-white'
+                  : 'bg-white text-gray-700 border border-gray-200'
+              }`}
+            >
+              {msg.text}
+            </div>
+          </div>
         ))}
       </div>
 

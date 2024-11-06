@@ -852,8 +852,14 @@ video {
 .mt-\[50px\]{
   margin-top: 50px;
 }
+.mb-24{
+  margin-bottom: 6rem;
+}
 .block{
   display: block;
+}
+.inline-block{
+  display: inline-block;
 }
 .flex{
   display: flex;
@@ -1242,6 +1248,9 @@ video {
 .overflow-scroll{
   overflow: scroll;
 }
+.overflow-y-auto{
+  overflow-y: auto;
+}
 .overflow-x-hidden{
   overflow-x: hidden;
 }
@@ -1627,6 +1636,9 @@ video {
 }
 .text-center{
   text-align: center;
+}
+.text-right{
+  text-align: right;
 }
 .text-2xl{
   font-size: 1.5rem;

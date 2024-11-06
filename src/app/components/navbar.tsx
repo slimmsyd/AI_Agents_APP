@@ -30,6 +30,7 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
 	const [loginError, setLoginError] = useState('');
   const [login, setLogin] = useState(false);
 
+
   const toggleDropdown = () => {
     console.log("toggleDropdown");
     setIsDropdownOpen(!isDropdownOpen);
@@ -127,23 +128,14 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
               Home
             </a>
           </li>
-          {/* <li>
-            <a className="flex items-center gap-2" href="/ai">
-              YCAI
-            </a>
-          </li>
-          <li>
-            <a className="flex items-center gap-2" href="/about">
-              Zero To Glitching
-            </a>
-          </li> */}
+      
         </ul>
 
         <div className="lg:flex hidden items-end justify-end gap-2 flex-1">
-          {session ? (
+          {login ? (
             <div className="flex flex-row gap-2">
               <Link
-                href="/ai/chat"
+                href="/ai/agents"
                 className="  bg-[rgba(39,60,110,0.1)] hover:bg-[rgba(39,60,110,0.39)] text-[14px] border-[1px] border-[rgb(39,60,110)] transition-colors duration-200 px-4 py-2 rounded-md cursor-pointer"
               >
                 Go to app
@@ -157,12 +149,12 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
             </div>
           ) : (
             <div className="w-full flex flex-row gap-2 justify-end">
-              <button
+              {/* <button
                 className="  bg-[rgba(39,60,110,0.1)] hover:bg-[rgba(39,60,110,0.39)] text-[14px] border-[1px] border-[rgb(39,60,110)] transition-colors duration-200 px-4 py-2 rounded-md cursor-pointer"
                 onClick={() => signIn("google")}
               >
                 Login{" "}
-              </button>
+              </button> */}
 
               <button
                 className="  bg-[rgba(39,60,110,0.1)] hover:bg-[rgba(39,60,110,0.39)] text-[14px] border-[1px] border-[rgb(39,60,110)] transition-colors duration-200 px-4 py-2 rounded-md cursor-pointer"
