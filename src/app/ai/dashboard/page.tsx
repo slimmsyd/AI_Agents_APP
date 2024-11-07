@@ -33,12 +33,13 @@ const formatResponse = (response: string): string => {
 };
 
 // @ts-ignore
-export default function DashboardPage({agentConfig}) {
+export default function DashboardPage() {
   const searchParams = useSearchParams();
   const agentName = searchParams.get("agent") || "AI Agent";
   const [message, setMessage] = useState("");
   const [agentID, setAgentID] = useState(null);
   const [responses, setResponses] = useState<Response[]>([]);
+  const { agentConfig } = useAgentConfig();
 
   const suggestedQuestions = [
     "How much revenue did Apple make last year?",

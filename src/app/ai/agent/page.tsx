@@ -109,7 +109,6 @@ export default function AgentPage() {
     showDashboard ? (   
       <div className="relative">
         <DashboardPage 
-          agentConfig={agentConfig}
         />
         <button
           onClick={() => setIsChatOpen(!isChatOpen)}
