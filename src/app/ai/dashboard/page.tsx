@@ -38,7 +38,7 @@ export default function DashboardPage() {
   const [message, setMessage] = useState("");
   const [agentID, setAgentID] = useState(null);
   const [responses, setResponses] = useState<Response[]>([]);
-  const { agentConfig } = useAgentConfig();
+  // const { agentConfig } = useAgentConfig();
 
   const suggestedQuestions = [
     "How much revenue did Apple make last year?",
@@ -124,10 +124,10 @@ export default function DashboardPage() {
       <div className="mt-32 mb-4 flex flex-col items-center">
         <div className="w-12 h-12 rounded-full bg-gray-200 flex flex-col items-center justify-center">
           <span className="text-xl text-gray-600">
-            {agentConfig.name[0]?.toUpperCase()}
+            {/* {agentConfig.name[0]?.toUpperCase()} */}
           </span>
         </div>
-        <span className="text-sm text-gray-600">{agentConfig.name}</span>
+        {/* <span className="text-sm text-gray-600">{agentConfig.name}</span> */}
       </div>
 
       {/* Welcome Message */}
