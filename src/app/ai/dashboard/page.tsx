@@ -58,7 +58,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     console.log("Logging the agent ID", agentID);
-  }, [agentID]);thegardenofash
+  }, [agentID]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
