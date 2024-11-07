@@ -11,7 +11,7 @@
     "@typescript-eslint/no-explicit-any": "off",
     "no-var": "off",
     "react/no-unescaped-entities": "off",
-    "@typescript-eslint/ban-ts-comment": "off" // Disable the rule
+    "@typescript-eslint/ban-ts-comment": "off"
   }
   // Ensure '@typescript-eslint/eslint-plugin' is installed to avoid loading errors.
 }

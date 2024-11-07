@@ -24,7 +24,7 @@ const formatResponse = (response: string): string => {
   
   const listItems = formattedResponse.match(/(\d+\..*?)(?=(\d+\.)|$)/gs);
   if (listItems) {
-    const listFormatted = listItems.map(item => `<li>${item.trim()}</li>`).join('<br />');
+    const listFormatted = listItems.map(item => `<li>${item.trim( b)}</li>`).join('<br />');
     formattedResponse = formattedResponse.replace(listItems.join(''), `<ul>${listFormatted}</ul>`);
   }
 
@@ -33,7 +33,7 @@ const formatResponse = (response: string): string => {
 };
 
 // @ts-ignore
-const DashboardPage = ({agentConfig}) => {
+export default function DashboardPage({agentConfig}) {
   const searchParams = useSearchParams();
   const agentName = searchParams.get("agent") || "AI Agent";
   const [message, setMessage] = useState("");
@@ -204,5 +204,3 @@ const DashboardPage = ({agentConfig}) => {
     </div>
   );
 }
-
-export default DashboardPage;
