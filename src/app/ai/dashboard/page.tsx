@@ -24,7 +24,7 @@ const formatResponse = (response: string): string => {
   
   const listItems = formattedResponse.match(/(\d+\..*?)(?=(\d+\.)|$)/gs);
   if (listItems) {
-    const listFormatted = listItems.map(item => `<li>${item.trim( b)}</li>`).join('<br />');
+    const listFormatted = listItems.map(item => `<li>${item.trim()}</li>`).join('<br />');
     formattedResponse = formattedResponse.replace(listItems.join(''), `<ul>${listFormatted}</ul>`);
   }
 
@@ -38,8 +38,15 @@ export default function DashboardPage() {
   const [message, setMessage] = useState("");
   const [agentID, setAgentID] = useState(null);
   const [responses, setResponses] = useState<Response[]>([]);
+  const [userId, setUserID] = useState<string | null>(null);
   // const { agentConfig } = useAgentConfig();
-
+const settingUserID = () => {
+  const userID = localStorage.getItem('user_id');
+  if(userID) {
+    console.log("Setting the user ID", userID);
+    setUserID(userID);
+  }
+}
   const suggestedQuestions = [
     "How much revenue did Apple make last year?",
     "Is McDonald's profitable?",
@@ -88,7 +95,7 @@ export default function DashboardPage() {
     setMessage("");
     
     const formattedAgentID = localAgentID.trim();
-    const endpoint = `https://www.huemanapi.com/agent_demo/${formattedAgentID}`;
+    const endpoint = `https://www.huemanapi.com/agents/${userId}/${formattedAgentID}`;
     const accessToken = localStorage.getItem("accessToken");
     console.log("Logging the endpoint", message);
 
@@ -103,7 +110,9 @@ export default function DashboardPage() {
         }
       );
 
-      const finalResponse = response.data.Assistant;
+      console.log("Logging the response", response.data)
+
+      const finalResponse = response.data.ai_response;
       let currentText = '';
       
       for (let i = 0; i < finalResponse.length; i++) {

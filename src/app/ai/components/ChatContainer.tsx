@@ -14,9 +14,9 @@ interface ChatMessage {
 interface ChatContainerProps {
   isOpen: boolean;
   onClose: () => void;
-  agentId: string;
+  agentId?: string;
   agentIDs: {
-    My_Agents: Array<{
+    my_agents: Array<{
       instruction: string;
       name: string;
       uid: string;
@@ -28,7 +28,7 @@ interface ChatContainerProps {
 export default function ChatContainer({ isOpen, onClose, agentId, agentIDs, selectingNewAgent }: ChatContainerProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const [userID, setUserID] = useState<string | null>(null);
 
@@ -43,6 +43,10 @@ useEffect(() => {
   // console.log("Logging the agent IDs", agentIDs);
   settingUserID();
 }, [agentIDs]);
+
+
+console.log("Logging the agent IDs", agentIDs)
+
 
 
   const sendMessage = async (e: React.FormEvent) => {
@@ -111,10 +115,10 @@ useEffect(() => {
         </div>
 
         {/* AI Agents Section */}
-        <div className="border-b p-4">
+        <div className="border-b p-4 max-h-[200px] overflow-y-auto">
           <h3 className="text-md mb-3">AI Agents</h3>
           <div className="space-y-2">
-            {agentIDs?.My_Agents ? agentIDs.My_Agents.map((agent) => (
+            {agentIDs?.my_agents ? agentIDs.my_agents.map((agent) => (
               <button
                 key={agent.uid}
                 onClick={() => {
@@ -132,7 +136,7 @@ useEffect(() => {
         </div>
 
         {/* Recent Conversations Section */}
-        <div className="border-b p-4">
+        <div className="border-b p-4 overflow-y-auto">
           <h3 className="text-md  mb-3">Recent Conversations</h3>
           <div className="space-y-2">
             {/* Recent conversations will be dynamically rendered here */}

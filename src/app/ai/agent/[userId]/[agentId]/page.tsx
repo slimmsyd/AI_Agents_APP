@@ -7,67 +7,51 @@ import ChatContainer from '../../../components/ChatContainer';
 import DashboardPage from '../../../dashboard/page';
 import axios from 'axios';
 
-import { use } from 'react';
-
 export default function Page({
   params,
 }: {
   params: { userId: string; agentId: string };
 }) {
-  // Unwrap params with React.use()
-  const { userId, agentId } = use(params);
 
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(true); // Set to true by default for conversation view
   const [conversation, setConversation] = useState(null);
-  const [agentIDs, setAgentIDs] = useState<{instruction: string; name: string; uid: string;}[]>([]);
+  // const [agentIDs, setAgentIDs] = useState<{ {instruction: string; name: string; uid: string;}[]}>({my_agents: []});
+
+  const [agentIDs, setAgentIDs] = useState<{ my_agents: {instruction: string; name: string; uid: string;}[]}>({my_agents: []});
   const [selectedAgent, setSelectedAgent] = useState(null);
+  const [agentConversations, setAgentConversations] = useState([]);
 
+const [userId, setUserId] = useState<string | null>(null);
+const [agentId, setAgentId] = useState<string | null>(null);
 
+const settingUserID = () => {
+  const userID = localStorage.getItem('user_id');
+  if(userID) {
+    setUserId(userID);
+  }
+}
 
+const settingAgentID = () => {
+  const agentID = localStorage.getItem('currentAgent');
+  if(agentID) {
+    setAgentId(agentID);
+  }
+} 
 
+useEffect(() => {
+  settingUserID();
+  settingAgentID();
+}, [])
 
+  console.log("Logging the user ID", userId)
+  console.log("Logging the agent ID", agentId)
   const selectingNewAgent = (agentId: string) => {
     setSelectedAgent(agentId);
     localStorage.setItem("currentAgent", agentId);
   }
-
-
-  // Fetch conversation history
-  useEffect(() => {
-    const fetchConversation = async () => {
-      const accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) return;
-
-      try {
-        const response = await axios.get(
-          `https://www.huemanapi.com/agents/${userId}/${agentId}/chat/${conversation}`,
-          {
-            headers: {
-              'Authorization': `Bearer ${accessToken}`,
-              'Content-Type': 'application/json'
-            }
-          }
-        );
-
-        console.log("Logging the response", response.data)
-
-        if (response.data) {
-          setConversation(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching conversation:", error);
-      }
-    };
-
-    if (userId && agentId) {
-      fetchConversation();
-    }
-  }, [userId, agentId, conversation]);
-
-
 
   useEffect(() => {
     const currentAgent = localStorage.getItem("currentAgent");
@@ -75,9 +59,6 @@ export default function Page({
       setSelectedAgent(currentAgent);
     }
   }, []);
-
-
-
 
   // Fetch agents list (similar to original file)
   useEffect(() => {
@@ -92,9 +73,13 @@ export default function Page({
             'Content-Type': 'application/json'
           }
         });
+
+        console.log("Logging the response", response.data)
+
         
         if(response.data) {
-          setAgentIDs(response.data);
+          console.log("Setting the agent IDs", response.data)
+          setAgentIDs( response.data);
         }
       } catch (error) {
         console.error("Error fetching agents:", error);
@@ -103,6 +88,55 @@ export default function Page({
 
     fetchAgents();
   }, []);
+
+  // Modify the useEffect to fetch conversations
+  useEffect(() => {
+    console.log("Fetching the agent conversations")
+    const fetchAgentConversations = async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) return;
+
+      try {
+        // Fetch all conversations for the user
+        const response = await axios.get(
+          'https://www.huemanapi.com/agent_conversations',
+          {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+
+
+        console.log("Logging the response", response.data)
+
+      
+        // // Filter conversations for the specific agent
+        // const agentSpecificConversations = response.data.filter(
+        //   (conv: any) => conv.agent_id === agentId
+        // // );
+
+        // setAgentConversations(agentSpecificConversations);
+        // console.log("Agent conversations:", agentSpecificConversations);
+      } catch (error) {
+        console.error("Error fetching agent conversations:", error);
+      }
+    };
+
+    fetchAgentConversations();
+
+  
+    if (userId && agentId) {
+      console.log("Fetching the agent conversations")
+    }
+  }, [userId, agentId]);
+
+
+useEffect(() => {
+  console.log("Logging the user agents here", agentIDs)
+}, [agentIDs])
 
   return (
     <div className="relative">
