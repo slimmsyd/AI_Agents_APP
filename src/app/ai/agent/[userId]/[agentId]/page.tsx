@@ -39,10 +39,18 @@ export default function Page() {
   };
 
   useEffect(() => {
-    settingUserID();
-    settingAgentID();
+    const pathParts = window.location.pathname.split('/');
+    const urlUserId = pathParts[pathParts.length - 2];
+    const urlAgentId = pathParts[pathParts.length - 1];
+    
+    // Set the values to localStorage
+    localStorage.setItem('user_id', urlUserId);
+    localStorage.setItem('currentAgent', urlAgentId);
+    
+    // Update state
+    setUserId(urlUserId);
+    setAgentId(urlAgentId);
   }, []);
-
 
   const selectingNewAgent = (agentId: string) => {
     setSelectedAgent(agentId);
@@ -56,6 +64,8 @@ export default function Page() {
     }
   }, []);
 
+
+  
   // Fetch agents list (similar to original file)
   useEffect(() => {
     const fetchAgents = async () => {
@@ -112,11 +122,12 @@ export default function Page() {
     return transformedMessages;
   };
 
+
   // Update the useEffect that fetches conversations
   useEffect(() => {
     const fetchAgentConversations = async () => {
       const accessToken = localStorage.getItem("accessToken");
-      if (!accessToken) return;
+      // if (!accessToken) return;
 
       try {
         const response = await axios.get(

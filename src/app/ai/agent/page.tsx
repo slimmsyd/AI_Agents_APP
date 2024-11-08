@@ -29,9 +29,6 @@ export default function AgentPage() {
 
   const [userId, setUserId] = useState<string | null>(null);
 
-  const [isPublicAccess, setIsPublicAccess] = useState(false);
-  const [publicAgentData, setPublicAgentData] = useState(null);
-
   const settingUserID = () => {
     const userID = localStorage.getItem("user_id");
     if (userID) {
@@ -116,48 +113,8 @@ export default function AgentPage() {
     fetchAgents();
   }, []);
 
-  useEffect(() => {
-    const checkAccess = async () => {
-      const accessToken = localStorage.getItem('accessToken');
-      const pathParts = window.location.pathname.split('/');
-      const sharedAgentId = pathParts[pathParts.length - 1];
-      
-      if (!accessToken && sharedAgentId) {
-        setIsPublicAccess(true);
-        try {
-          const response = await axios.get(`https://www.huemanapi.com/public_agent/${sharedAgentId}`);
-          setPublicAgentData(response.data);
-        } catch (error) {
-          console.error("Error fetching public agent:", error);
-          router.push('/login'); // Redirect to login if fetch fails
-        }
-      }
-    };
 
-    checkAccess();
-  }, []);
 
-  if (isPublicAccess && publicAgentData) {
-    return (
-      <div className="flex flex-col items-center min-h-screen bg-gray-50 p-4">
-        <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-sm mb-8">
-          <h1 className="text-2xl font-bold mb-4">{publicAgentData.name}</h1>
-          <p className="text-gray-600 mb-4">{publicAgentData.description}</p>
-          <div className="border-t pt-4">
-            <p className="text-sm text-gray-500">
-              To interact with this agent, please 
-              <button 
-                onClick={() => router.push('/login')}
-                className="text-blue-600 hover:text-blue-800 ml-1"
-              >
-                log in
-              </button>
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

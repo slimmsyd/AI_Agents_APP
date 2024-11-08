@@ -42,7 +42,6 @@ export default function ChatContainer({ isOpen, onClose, agentId, agentIDs, sele
   }
 useEffect(() => {
   // console.log("Logging the agent IDs", agentIDs);
-  console.log("Logging the conversation object:", conversation);
   settingUserID();
 
 }, [agentIDs, conversation]);

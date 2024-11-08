@@ -43,11 +43,15 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
 
     if (accessToken && username && userID) {
       setLogin(true);
+      setShowSignupModal(false);
     }
 
 
   }, [session])
 
+  useEffect(() => {
+    setShowSignupModal(false);
+  }, [login])
 
 
 	const handleSubmit = async (event: React.FormEvent) => {

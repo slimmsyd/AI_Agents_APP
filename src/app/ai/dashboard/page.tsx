@@ -142,6 +142,22 @@ export default function DashboardPage() {
     console.log("Logging the conversation object here to:", conversation);
   }, [conversation , agentID]);
 
+  // const [agentId, setAgentId] = useState<string | null>(null);
+
+  // useEffect(() => {
+  //   const pathParts = window.location.pathname.split('/');
+  //   const urlUserId = pathParts[pathParts.length - 2];
+  //   const urlAgentId = pathParts[pathParts.length - 1];
+    
+  //   // Set the values to localStorage
+  //   localStorage.setItem('user_id', urlUserId);
+  //   localStorage.setItem('currentAgent', urlAgentId);
+    
+  //   // Update state
+  //   setUserId(urlUserId);
+  //   setAgentId(urlAgentId);
+  // }, []);
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       {/* Agent Icon */}
