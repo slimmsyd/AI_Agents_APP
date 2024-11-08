@@ -24,7 +24,15 @@ export default function AgentPage() {
 
   const[response, setResponse] = useState(null);
   const [agentID, setAgentID] = useState(null);
-  const [agentIDs, setAgentIDs] = useState<string[]>([]);
+  const [selectedAgent, setSelectedAgent] = useState(null);
+  const [agentIDs, setAgentIDs] = useState<{instruction: string; name: string; uid: string;}[]>([]);
+
+  const selectingNewAgent = (agentId: string) => {
+    console.log("Selecting new agent", agentId);
+    setSelectedAgent(agentId);
+    localStorage.setItem("currentAgent", agentId);
+  }
+
 
   useEffect(() => {
  
@@ -37,6 +45,65 @@ export default function AgentPage() {
 
 
   }, [])
+
+  // Fetch all conversations for the user
+  useEffect(() => {
+    const fetchConversations = async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) return;
+
+      try {
+        const response = await axios.get('https://www.huemanapi.com/agent_conversations', {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+
+        console.log("Logging the the all conversations", response.data)
+        if (response.data) {
+          console.log("Conversations:", response.data);
+          // Handle the conversations data as needed
+        }
+      } catch (error) {
+        console.error("Error fetching conversations:", error);
+      }
+    };
+
+    fetchConversations();
+  }, []);
+
+  //Gather hte list of agents 
+  useEffect(() => {
+    const fetchAgents = async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) return;
+
+      try {
+        const response = await axios.get('https://www.huemanapi.com/my_agents', {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+
+        console.log("Logging the response", response.data)
+        
+        if(response.data) {
+          setShowDashboard(true);
+          setAgentIDs(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching agents:", error);
+      }
+    };
+
+    fetchAgents();
+  }, []);
+
+
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -96,7 +163,6 @@ export default function AgentPage() {
  
   useEffect(() => {
 
-    console.log("Logging the isloading", isLoading);
         
   }, [isLoading]);
 
@@ -118,7 +184,9 @@ export default function AgentPage() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
           </svg>
         </button>
-        <ChatContainer isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} agentId={agentID} agentIDs={agentIDs} />
+        <ChatContainer isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} agentId={agentID} agentIDs={agentIDs}
+        selectingNewAgent={selectingNewAgent}
+        />
       </div>
     ) : (
       <div className="flex flex-col items-center min-h-screen bg-gray-50 p-4">

@@ -45,14 +45,20 @@ export default function DashboardPage() {
     "Is McDonald's profitable?",
     "What's the current stock price of Tesla?",
   ];
+  // useEffect(() => {
+  //   const agentRes = localStorage.getItem("agentReponse");
+  //   if (agentRes) {
+  //     const parsedRes = JSON.parse(agentRes);
+  //     console.log("Logging the parsed response", parsedRes);
+  //     localStorage.setItem("agentID", parsedRes.AGENT_ID);
+  //     setAgentID(parsedRes.agent_id);
+  //     console.log("Logging the agent ID", parsedRes.agent_id);
+  //   }
+  // }, []);
   useEffect(() => {
-    const agentRes = localStorage.getItem("agentReponse");
-    if (agentRes) {
-      const parsedRes = JSON.parse(agentRes);
-      console.log("Logging the parsed response", parsedRes);
-      localStorage.setItem("agentID", parsedRes.AGENT_ID);
-      setAgentID(parsedRes.agent_id);
-      console.log("Logging the agent ID", parsedRes.agent_id);
+    const currentAgent = localStorage.getItem("currentAgent");
+    if(currentAgent) {
+      setAgentID(currentAgent);
     }
   }, []);
 
@@ -63,7 +69,7 @@ export default function DashboardPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const localAgentID = localStorage.getItem("agentID"); 
+    const localAgentID = localStorage.getItem("currentAgent"); 
     
     if (!localAgentID || !message.trim()) {
       console.error("No agent ID found or empty message");

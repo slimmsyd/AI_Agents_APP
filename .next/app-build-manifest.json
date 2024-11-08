@@ -20,6 +20,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/ai/agent/page.js"
+    ],
+    "/ai/agent/[userId]/[agentId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/ai/agent/[userId]/[agentId]/page.js"
     ]
   }
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -14,16 +15,35 @@ interface ChatContainerProps {
   isOpen: boolean;
   onClose: () => void;
   agentId: string;
-  agentIDs: string[];
+  agentIDs: {
+    My_Agents: Array<{
+      instruction: string;
+      name: string;
+      uid: string;
+    }>;
+  };
+  selectingNewAgent: (agentId: string) => void;
 }
 
-export default function ChatContainer({ isOpen, onClose, agentId, agentIDs }: ChatContainerProps) {
+export default function ChatContainer({ isOpen, onClose, agentId, agentIDs, selectingNewAgent }: ChatContainerProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const [userID, setUserID] = useState<string | null>(null);
 
-  console.log("Logging the agnet ID HER", agentId)
-  console.log("Loggin the agent idS ehre", agentIDs)
+  const settingUserID = () => {
+    const userID = localStorage.getItem('user_id');
+    if(userID) {
+      console.log("Setting the user ID", userID);
+      setUserID(userID);
+    }
+  }
+useEffect(() => {
+  // console.log("Logging the agent IDs", agentIDs);
+  settingUserID();
+}, [agentIDs]);
+
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,7 +98,7 @@ export default function ChatContainer({ isOpen, onClose, agentId, agentIDs }: Ch
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className="p-4 border-b flex justify-between items-center">
-          <h2 className="text-lg font-semibold">Chat History</h2>
+          <Link href="/ai/agent" className="text-lg font-semibold">Chat History</Link>
           <Link href="/" className="text-sm font-semibold">Home</Link>
           <button
             onClick={onClose}
@@ -92,9 +112,22 @@ export default function ChatContainer({ isOpen, onClose, agentId, agentIDs }: Ch
 
         {/* AI Agents Section */}
         <div className="border-b p-4">
-          <h3 className="text-md  mb-3">AI Agents</h3>
+          <h3 className="text-md mb-3">AI Agents</h3>
           <div className="space-y-2">
-            {/* AI agents will be dynamically rendered here */}
+            {agentIDs?.My_Agents ? agentIDs.My_Agents.map((agent) => (
+              <button
+                key={agent.uid}
+                onClick={() => {
+                  selectingNewAgent(agent.uid);
+                  router.push(`/ai/agent/${userID}/${agent.uid}`);
+                }}
+                className={`bg-transparent w-full text-left p-1 rounded hover:bg-gray-100 ${
+                  agent.uid === agentId ? 'bg-gray-100' : ''
+                }`}
+              >
+                {agent.name || 'Unnamed Agent'}
+              </button>
+            )) : <p>No agents available</p>}
           </div>
         </div>
 
