@@ -5,7 +5,7 @@ import "./globals.css";
 import Web3ModalProvider from "./contexts/Web3Modal";
 import { SessionProvider } from "next-auth/react";
 import { ConversationProvider } from "../hooks/ConversationContext";
-
+import { ChatProvider } from "./contexts/ChatContext";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -40,10 +40,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ConversationProvider>
-          <SessionProvider>
-            <Web3ModalProvider>{children}</Web3ModalProvider>
-          </SessionProvider>
-          z
+          <ChatProvider>
+            <SessionProvider>
+              <Web3ModalProvider>{children}</Web3ModalProvider>
+            </SessionProvider>
+          </ChatProvider>
         </ConversationProvider>
       </body>
     </html>

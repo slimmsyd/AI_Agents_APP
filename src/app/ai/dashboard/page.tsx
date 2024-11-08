@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
+import { useChatContext } from "@/app/contexts/ChatContext";
 
 interface AgentConfig {
   name: string;
@@ -37,8 +38,7 @@ export default function DashboardPage() {
 
   const [message, setMessage] = useState("");
   const [agentID, setAgentID] = useState(null);
-  const [responses, setResponses] = useState<Response[]>([]);
-  const [userId, setUserID] = useState<string | null>(null);
+  const { responses, setResponses, userId, setUserID } = useChatContext();
   // const { agentConfig } = useAgentConfig();
 const settingUserID = () => {
   const userID = localStorage.getItem('user_id');

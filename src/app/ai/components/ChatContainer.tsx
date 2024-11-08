@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useChatContext } from '@/app/contexts/ChatContext';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -31,21 +32,22 @@ export default function ChatContainer({ isOpen, onClose, agentId, agentIDs, sele
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const [userID, setUserID] = useState<string | null>(null);
+  const { responses, setResponses, conversation, setConversation } = useChatContext();
 
   const settingUserID = () => {
     const userID = localStorage.getItem('user_id');
     if(userID) {
-      console.log("Setting the user ID", userID);
       setUserID(userID);
     }
   }
 useEffect(() => {
   // console.log("Logging the agent IDs", agentIDs);
   settingUserID();
-}, [agentIDs]);
+  console.log("Logging the conversation object:", conversation);
+
+}, [agentIDs, conversation]);
 
 
-console.log("Logging the agent IDs", agentIDs)
 
 
 
@@ -102,7 +104,7 @@ console.log("Logging the agent IDs", agentIDs)
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className="p-4 border-b flex justify-between items-center">
-          <Link href="/ai/agent" className="text-lg font-semibold">Chat History</Link>
+          <Link href="/ai/agent" className="text-lg font-semibold">Chat Dashboard</Link>
           <Link href="/" className="text-sm font-semibold">Home</Link>
           <button
             onClick={onClose}
@@ -122,6 +124,7 @@ console.log("Logging the agent IDs", agentIDs)
               <button
                 key={agent.uid}
                 onClick={() => {
+                  setResponses([]);
                   selectingNewAgent(agent.uid);
                   router.push(`/ai/agent/${userID}/${agent.uid}`);
                 }}
@@ -137,9 +140,20 @@ console.log("Logging the agent IDs", agentIDs)
 
         {/* Recent Conversations Section */}
         <div className="border-b p-4 overflow-y-auto">
-          <h3 className="text-md  mb-3">Recent Conversations</h3>
+          <h3 className="text-md mb-3">Recent Conversations</h3>
           <div className="space-y-2">
-            {/* Recent conversations will be dynamically rendered here */}
+            {conversation ? (
+              <button
+                key={conversation.id}
+                className={`bg-transparent w-full text-left p-1 rounded hover:bg-gray-100 ${
+                  conversation.id === agentId ? 'bg-gray-100' : ''
+                }`}
+              >
+                {conversation.messages[0].agent_id || 'Unnamed Agent'}
+              </button>
+            ) : (
+              <p>No conversations available</p>
+            )}
           </div>
         </div>
 

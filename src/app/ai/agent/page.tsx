@@ -28,7 +28,6 @@ export default function AgentPage() {
   const [agentIDs, setAgentIDs] = useState<{ my_agents: {instruction: string; name: string; uid: string;}[]}>({my_agents: []});
 
   const selectingNewAgent = (agentId: string) => {
-    console.log("Selecting new agent", agentId);
     setSelectedAgent(agentId);
     localStorage.setItem("currentAgent", agentId);
   }
@@ -89,7 +88,6 @@ export default function AgentPage() {
         });
         
 
-        console.log("Logging the response", response.data)
         
         if(response.data) {
           setShowDashboard(true);
@@ -117,7 +115,6 @@ export default function AgentPage() {
     const endpoint = "https://www.huemanapi.com/create_agent"
 
 
-    console.log("Logging the agent config", agentConfig.instructions)
 
     try {
       const response = await axios.post(endpoint, {

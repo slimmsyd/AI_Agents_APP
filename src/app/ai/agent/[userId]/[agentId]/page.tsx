@@ -6,13 +6,13 @@ import LoadingComponent from "@/app/components/loadingComponent";
 import ChatContainer from "../../../components/ChatContainer";
 import DashboardPage from "../../../dashboard/page";
 import axios from "axios";
+import { useChatContext } from "@/app/contexts/ChatContext";
 
 export default function Page({}: {}) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [showDashboard, setShowDashboard] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(true); // Set to true by default for conversation view
-  const [conversation, setConversation] = useState(null);
+  const { responses, setResponses, conversation, setConversation } = useChatContext();
   // const [agentIDs, setAgentIDs] = useState<{ {instruction: string; name: string; uid: string;}[]}>({my_agents: []});
 
   const [agentIDs, setAgentIDs] = useState<{
@@ -43,8 +43,7 @@ export default function Page({}: {}) {
     settingAgentID();
   }, []);
 
-  console.log("Logging the user ID", userId);
-  console.log("Logging the agent ID", agentId);
+
   const selectingNewAgent = (agentId: string) => {
     setSelectedAgent(agentId);
     localStorage.setItem("currentAgent", agentId);
@@ -74,10 +73,8 @@ export default function Page({}: {}) {
           }
         );
 
-        console.log("Logging the response", response.data);
 
         if (response.data) {
-          console.log("Setting the agent IDs", response.data);
           setAgentIDs(response.data);
         }
       } catch (error) {
@@ -88,15 +85,40 @@ export default function Page({}: {}) {
     fetchAgents();
   }, []);
 
-  // Modify the useEffect to fetch conversations
+  // Add this function to transform conversation messages to our Response format
+  const transformConversationToResponses = (conversation: any) => {
+    if (!conversation?.messages) return [];
+    
+    const transformedMessages = [];
+    
+    // Process messages in pairs (user + assistant)
+    for (let i = 0; i < conversation.messages.length; i++) {
+      const currentMsg = conversation.messages[i];
+      
+      if (currentMsg.role === 'user') {
+        // Create a response object combining user question and assistant response
+        transformedMessages.push({
+          question: currentMsg.message,
+          response: conversation.messages[i + 1]?.message || '',
+          id: currentMsg.timestamp,
+          sender: currentMsg.sender,
+          sender_id: currentMsg.sender_id,
+          timestamp: currentMsg.timestamp,
+          agent: conversation.agent
+        });
+      }
+    }
+    
+    return transformedMessages;
+  };
+
+  // Update the useEffect that fetches conversations
   useEffect(() => {
-    console.log("Fetching the agent conversations");
     const fetchAgentConversations = async () => {
       const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) return;
 
       try {
-        // Fetch all conversations for the user
         const response = await axios.get(
           "https://www.huemanapi.com/agent_conversations",
           {
@@ -107,29 +129,35 @@ export default function Page({}: {}) {
           }
         );
 
-        console.log("Logging the response", response.data);
 
-        // // Filter conversations for the specific agent
-        // const agentSpecificConversations = response.data.filter(
-        //   (conv: any) => conv.agent_id === agentId
-        // // );
+        
 
-        // setAgentConversations(agentSpecificConversations);
-        // console.log("Agent conversations:", agentSpecificConversations);
+        if (response.data?.conversations) {
+          console.log("Logging the response", response.data);
+          // Find the conversation where any message matches the agentId
+          const currentConversation = response.data.conversations.find(
+            (conv: any) => conv.messages.some((msg: any) => msg.agent_id === agentId)
+          );
+
+
+          if (currentConversation) {
+            setConversation(currentConversation);
+            // Transform and set the responses
+            const transformedResponses = transformConversationToResponses(currentConversation);
+            setResponses(transformedResponses);
+          }
+        }
       } catch (error) {
         console.error("Error fetching agent conversations:", error);
       }
     };
 
-    fetchAgentConversations();
-
     if (userId && agentId) {
-      console.log("Fetching the agent conversations");
+      fetchAgentConversations();
     }
   }, [userId, agentId]);
 
   useEffect(() => {
-    console.log("Logging the user agents here", agentIDs);
   }, [agentIDs]);
 
   return (
@@ -137,7 +165,7 @@ export default function Page({}: {}) {
       <DashboardPage />
       <button
         onClick={() => setIsChatOpen(!isChatOpen)}
-        className="fixed bottom-[50px] left-4 bg-gray-700 text-white p-4 rounded-full shadow-lg hover:bg-gray-600"
+        className="fixed bottom-[50px] z-20 left-4 bg-gray-700 text-white p-4 rounded-full shadow-lg hover:bg-gray-600"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
