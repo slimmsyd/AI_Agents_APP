@@ -38,20 +38,26 @@ export default function DashboardPage() {
 
   const [message, setMessage] = useState("");
   const [agentID, setAgentID] = useState(null);
-  const { responses, setResponses, userId, setUserID } = useChatContext();
+  const { responses, setResponses, conversation, setConversation } = useChatContext();
+  const [userId, setUserId] = useState<string | null>(null);
+
   // const { agentConfig } = useAgentConfig();
-const settingUserID = () => {
-  const userID = localStorage.getItem('user_id');
-  if(userID) {
-    console.log("Setting the user ID", userID);
-    setUserID(userID);
+  const settingUserID = () => {
+    const userID = localStorage.getItem("user_id");
+    if (userID) {
+      setUserId(userID);
+    }
+  };
+  const selectingNewAgent = (agentId: string) => {
+    setSelectedAgent(agentId);
+    localStorage.setItem("currentAgent", agentId);
   }
-}
-  const suggestedQuestions = [
-    "How much revenue did Apple make last year?",
-    "Is McDonald's profitable?",
-    "What's the current stock price of Tesla?",
-  ];
+
+  useEffect(() => {
+    settingUserID();
+  }, []);
+
+
   // useEffect(() => {
   //   const agentRes = localStorage.getItem("agentReponse");
   //   if (agentRes) {
@@ -64,13 +70,12 @@ const settingUserID = () => {
   // }, []);
   useEffect(() => {
     const currentAgent = localStorage.getItem("currentAgent");
-    if(currentAgent) {
-      setAgentID(currentAgent);
-    }
+    setAgentID(currentAgent);
+  
   }, []);
 
   useEffect(() => {
-    console.log("Logging the agent ID", agentID);
+ 
   }, [agentID]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -133,16 +138,29 @@ const settingUserID = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("Logging the conversation object here to:", conversation);
+  }, [conversation , agentID]);
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       {/* Agent Icon */}
       <div className="mt-32 mb-4 flex flex-col items-center">
         <div className="w-12 h-12 rounded-full bg-gray-200 flex flex-col items-center justify-center">
-          <span className="text-xl text-gray-600">
-            {/* {agentConfig.name[0]?.toUpperCase()} */}
-          </span>
+    
         </div>
-        {/* <span className="text-sm text-gray-600">{agentConfig.name}</span> */}
+        {conversation ? (
+              <button
+                key={conversation.id}
+                className={`bg-transparent w-full text-left p-1 rounded hover:bg-gray-100 ${
+                  conversation.id === agentID ? 'bg-gray-100' : ''
+                }`}
+              >
+                {conversation.agent || 'Unnamed Agent'}
+              </button> 
+            ) : (
+              <p>No conversations available</p>
+            )}
       </div>
 
       {/* Welcome Message */}
@@ -151,7 +169,7 @@ const settingUserID = () => {
       </div>
 
       {/* Suggested Questions */}
-      <div className="flex flex-wrap gap-4 justify-center max-w-2xl px-4">
+      {/* <div className="flex flex-wrap gap-4 justify-center max-w-2xl px-4">
         {suggestedQuestions.map((question, index) => (
           <button
             key={index}
@@ -160,7 +178,7 @@ const settingUserID = () => {
             {question}
           </button>
         ))}
-      </div>
+      </div> */}
 
       {/* Chat Messages */}
       <div className="w-full max-w-2xl px-4 mb-24 mt-8 overflow-y-auto">

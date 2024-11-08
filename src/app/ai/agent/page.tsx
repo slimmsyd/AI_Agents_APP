@@ -40,6 +40,11 @@ export default function AgentPage() {
     localStorage.setItem("currentAgent", agentId);
   }
 
+  useEffect(() => {
+    settingUserID();
+    setResponse([]);
+  }, []);
+
 
   useEffect(() => {
  
