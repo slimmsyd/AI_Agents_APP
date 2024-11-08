@@ -8,7 +8,7 @@ import DashboardPage from "../../../dashboard/page";
 import axios from "axios";
 import { useChatContext } from "@/app/contexts/ChatContext";
 
-export default function Page({}: {}) {
+export default function Page() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(true); // Set to true by default for conversation view
