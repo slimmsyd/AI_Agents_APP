@@ -155,6 +155,12 @@ export default function Navbar({ scrollToSection }: NavbarProps) {
                 className="  bg-[rgba(39,60,110,0.1)] hover:bg-[rgba(39,60,110,0.39)] text-[14px] border-[1px] border-[rgb(39,60,110)] transition-colors duration-200 px-4 py-2 rounded-md cursor-pointer"
                 onClick={() => setShowSignupModal(true)}
               >
+                Log in
+              </button>
+              <button
+                className="  bg-[rgba(39,60,110,0.1)] hover:bg-[rgba(39,60,110,0.39)] text-[14px] border-[1px] border-[rgb(39,60,110)] transition-colors duration-200 px-4 py-2 rounded-md cursor-pointer"
+                onClick={() => setShowSignupModal(true)}
+              >
                 Create An Account
               </button>
             </div>
